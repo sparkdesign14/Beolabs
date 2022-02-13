@@ -1,0 +1,30 @@
+﻿$(document).ajaxSuccess(function (event, request, settings) {
+    var goToLogin = false;
+    if (request.status == 200) {
+        if (request.responseText == "") {
+            goToLogin = true;
+        }
+        else {
+            var el = new $("<html/>");
+            el.html(request.responseText);
+            var h = el.find("h4");
+            if (h.length == 0) {
+                return;
+            }
+            var msgJson = h.html();
+            var q = JSON.parse(msgJson);
+            if (q.MESSAGE && q.MESSAGE == 'REQUESTNOTAUTHORIZED')
+                goToLogin = true;
+        }
+    }
+    else
+        if (request.status = 401) {
+            goToLogin = true;
+        }
+    if (goToLogin) {
+        var dummy = new Image;
+        dummy.src = '$';                  // using '' will fail on some browsers
+        var root = dummy.src.slice(0, -1); // remove trailing '$'
+        window.location = root + "account/login?sessionTimeout=1";
+    }
+});

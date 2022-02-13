@@ -1,0 +1,851 @@
+/* I. BASE ================================================================================================== */
+html, body {
+    color: #000;
+    font-family: 'Roboto Condensed', 'Arial Narrow', sans-serif !important;
+    height: 100%;   
+}
+
+body {
+    font-size: 15px !important;
+    line-height: 1.64;
+    background-color: #fff;
+    padding-top: 65px;
+    padding-bottom: 65px;
+    overflow: auto;
+}
+
+    body.loginBody {
+        background-image: url(../images/cells.jpg);
+        background-size: cover;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+    }
+    
+
+@media (max-width: 768px) {
+    body.loginBody {
+        background-image: none;
+        background-color: #EFEFEF;
+    }
+}
+
+/* II. TYPOGRAPHY =========================================================================================== */
+/* II.1 BASE ---------------------------------------------------------------------------------------------- */
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, strong, b {
+    font-family: 'Roboto Condensed', 'Arial Narrow', sans-serif !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #3F51B5; /* Indigo 500 */
+}
+
+.resultsTable h1, .resultsTable h2, .resultsTable h3, .resultsTable h4, .resultsTable h5, .resultsTable h6 {
+    color: #3F51B5; /* Indigo 500 */
+}
+
+h1 {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+h2, h3 {
+    font-weight: 300;
+}
+
+h2 {
+    font-size: 28px;
+}
+
+h3 {
+    font-size: 24px;
+}
+
+a, a:hover, a:visited {
+    color: #F57C00 !important; /* Orange 700 */
+    text-decoration: none !important;
+}
+
+    a:hover {
+        color: #000 !important;
+    }
+
+.navbar-inverse a:hover {
+    color: #fff !important;
+}
+
+.navbar-inverse .dropdown-menu a:hover {
+    color: #000 !important;
+}
+
+p.lead {
+    text-align: center;
+    color: #F57C00; /* Orange 700 */
+}
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 48px !important;
+    }
+
+    h2 {
+        font-size: 48px;
+        text-align: center;
+    }
+
+    h3 {
+        font-size: 20px;
+    }
+}
+
+.identityText1, .identityText2, .identityTextWhite1, .identityTextWhite2 {
+    font-family: 'Arial Bold', Arial, sans-serif;
+}
+
+.identityText1 {
+    color: #00539F;    
+}
+
+.identityText2 {
+    color: #ff9800; /* Orange 500 */    
+}
+
+.identityTextWhite1 {
+    color: #fff;
+    font-weight: 100 !important;
+}
+
+.identityTextWhite2 {
+    color: #fff;
+    font-weight: bold !important;
+}
+
+.pageHeader a, a:visited {
+    color: #ff9800; /* Orange 500 */
+    text-decoration: none;
+}
+
+    .pageHeader a:hover {
+        color: #000;
+        text-decoration: none;
+    }
+
+.pageHeader .alert {
+    padding: 5px;
+}
+
+.pageHeader {
+    /*background-color: #F8F8F8; /* Menu Grey */
+    /*border-bottom: 1px solid #E7E7E7 !important; /* Menu Border Grey */
+    margin-bottom: 10px;
+}
+
+.swPanel {
+    margin-bottom: 15px;
+    padding: 10px;
+}
+
+.panelContent {
+    /*border-bottom: 1px solid #FFCC80; /* Orange 200 */
+}
+
+/* II.2 ALIGNMENT ----------------------------------------------------------------------------------------- */
+.pad-section {
+    padding: 50px 0;
+}
+
+    .pad-section img {
+        width: 100%;
+    }
+
+.text-vcenter {
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+}
+
+    .text-vcenter h1 {
+        font-size: 4.5em;
+        font-weight: 700;
+        margin: 0;
+        padding: 0;
+    }
+
+/* II.3 EFFECTS ------------------------------------------------------------------------------------------- */
+
+.paper {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: inset 0 0 30px rgba(0,0,0,0.1), 1px 1px 3px rgba(0,0,0,0.2);
+}
+
+.sideVolumetry {
+    position: relative;
+    -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+    -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+}
+
+    .sideVolumetry:before, .sideVolumetry:after {
+        content: "";
+        position: absolute;
+        z-index: -1;
+        -webkit-box-shadow: 0 0 20px rgba(0,0,0,0.8);
+        -moz-box-shadow: 0 0 20px rgba(0,0,0,0.8);
+        box-shadow: 0 0 20px rgba(0,0,0,0.8);
+        top: 10px;
+        bottom: 10px;
+        left: 0;
+        right: 0;
+        -moz-border-radius: 100px / 10px;
+        border-radius: 100px / 10px;
+    }
+
+    .sideVolumetry:after {
+        right: 10px;
+        left: auto;
+        -webkit-transform: skew(8deg) rotate(3deg);
+        -moz-transform: skew(8deg) rotate(3deg);
+        -ms-transform: skew(8deg) rotate(3deg);
+        -o-transform: skew(8deg) rotate(3deg);
+        transform: skew(8deg) rotate(3deg);
+    }
+
+.volumetry {
+    position: relative;
+}
+
+    .volumetry:before, .volumetry:after {
+        z-index: -1;
+        position: absolute;
+        content: "";
+        bottom: 15px;
+        left: 10px;
+        width: 50%;
+        top: 80%;
+        max-width: 300px;
+        background: #777;
+        -webkit-box-shadow: 0 15px 10px #777;
+        -moz-box-shadow: 0 15px 10px #777;
+        box-shadow: 0 15px 10px #777;
+        -webkit-transform: rotate(-3deg);
+        -moz-transform: rotate(-3deg);
+        -o-transform: rotate(-3deg);
+        -ms-transform: rotate(-3deg);
+        transform: rotate(-3deg);
+    }
+
+    .volumetry:after {
+        -webkit-transform: rotate(3deg);
+        -moz-transform: rotate(3deg);
+        -o-transform: rotate(3deg);
+        -ms-transform: rotate(3deg);
+        transform: rotate(3deg);
+        right: 10px;
+        left: auto;
+    }
+
+
+/* III. SECTIONS ============================================================================================ */
+
+/* LOGIN */
+#mainLogin {
+    height: 550px;
+    
+    position: absolute;    
+    left: 0;
+    width: 100%;
+    margin-left: 0px;
+    margin-right: 0px;
+    /*background-image: url(../images/bg1.png);*/
+    /*background-image: url(../images/bg-repeat.png);*/
+    background-repeat: repeat-x;
+    background-position: center center;
+    z-index:1031;
+}
+
+#resetPasswordPanel {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 15px;
+}
+
+.synevoLogo {
+    width: 313px;
+    height: 125px;
+}
+
+.btnForgot {
+    float: left;
+    margin: 5px;
+}
+
+.btnAuth {
+    float: right;
+    margin: 5px;
+}
+
+@media (max-width: 992px) {
+    .synevoLogo {
+        width: 250px;
+        height: 100px;
+    }
+}
+
+@media (max-width: 768px) {
+    #mainLogin {
+        height: auto;
+        margin-top: 0;
+        position: relative;
+        top: 0;
+        left: 0;
+        width: 100%;
+        margin-left: 0px;
+        margin-right: 0px;
+        background-repeat: repeat-x;
+        background-position: center center;
+    }
+
+    .synevoLogo {
+        width: 200px;
+        height: 80px;
+    }
+
+    .btnForgot {
+        width: 100%;
+        float: none;
+        margin: 5px;
+    }
+
+    .btnAuth {
+        width: 100%;
+        float: none;
+        margin: 5px;
+    }
+}
+
+.loginUI-right {
+    text-align: right;
+    display: inline-block !important;
+    vertical-align: middle;
+    float: none !important;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 15px;
+    box-shadow: inset 0 0 30px rgba(0,0,0,0.1), 1px 1px 3px rgba(0,0,0,0.2);
+}
+
+.loginUI-left {
+    text-align: right;
+    display: inline-block !important;
+    vertical-align: middle;
+    float: none !important;
+
+}
+
+.loginUI-left2 {
+    text-align: left;
+    display: inline-block !important;
+    vertical-align: middle;
+    float: none !important;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 15px;
+    box-shadow: inset 0 0 30px rgba(0,0,0,0.1), 1px 1px 3px rgba(0,0,0,0.2);
+}
+
+div.loginUI-right div.input-group {
+    margin: 5px;
+    float: right;
+}
+
+div.loginUI-right #CaptchaCode {
+    margin: 5px;
+    float: right;
+}
+
+
+#forgotPasswordLink {
+    float: left;
+}
+
+#backToLoginButton {
+    float: left;
+}
+
+#submitLoginButton {
+    margin-right: 5px;
+}
+
+@media (min-width: 768px) {
+    #confirmationPanel {
+        text-align: center;
+    }
+}
+
+@media (min-width: 992px) {
+    #confirmationPanel {
+        text-align: center;
+    }
+}
+
+@media (min-width: 1200px) {
+    #confirmationPanel {
+        text-align: left;
+    }
+}
+
+@media (max-width: 992px) {
+    #mainLogin {
+        width: 100%;
+        text-align: center;
+        background-image: url(../images/bg1.png);
+        background-repeat: no-repeat;
+        background-position: right bottom;
+    }
+
+        #mainLogin .loginUI-left {
+            text-align: center;
+        }
+
+        #mainLogin .loginUI-right {
+            margin: 0 25px 25px 25px;
+            padding: 15px;
+            text-align: center;
+        }
+
+    #forgotPasswordLink {
+        float: left;
+        padding-left: 5px;
+        padding-top: 7px;
+    }
+
+    #submitLoginButton {
+        float: right;
+    }
+}
+
+/* DASHBOARD */
+
+#mainContainer {
+    padding-bottom: 50px !important;
+}
+
+/* RESULTS */
+#mainResults {
+    padding-bottom: 50px !important;
+}
+
+table.resultsTable tbody tr td {
+    vertical-align: middle;
+}
+
+.resultsTable .resultValue {
+    text-align: center;
+}
+
+table.resultsTable tbody tr td:nth-child(1) {
+    width: 50px;
+}
+
+table.resultsTable tbody tr td:nth-child(3) {
+    width: 20%;
+}
+
+table.resultsTable tbody tr td:nth-child(4) {
+    width: 15%;
+}
+
+table.resultsTable tbody tr td:nth-child(5) {
+    width: 130px;
+}
+
+table.testsList tbody tr td:nth-child(1) {
+    width: 32px;
+}
+
+table.resultsTablePAP tbody tr td {
+    vertical-align: top;
+}
+
+    table.resultsTablePAP tbody tr td.papHeading {
+        padding-left: 26px;
+    }
+
+table.resultsTablePAP li {
+    list-style-type: none;
+}
+
+.papcheck {
+    color: #0288D1 !important; /* Blue 700 */
+}
+
+#chartBody {
+    display: inline-block;
+}
+
+/* Top Toolbar */
+
+#topToolbarLeft {
+    float: left;
+}
+
+#topToolbarRight {
+    float: right;
+}
+
+#alertsPanel .alert {
+    padding: 5px;
+}
+
+.input-group {
+    margin: 5px;
+    float: right;
+}
+
+/* IV. IMAGES =============================================================================================== */
+.siteLogo {
+    width: 300px;
+    height: 100px;
+}
+
+.imageSmall {
+    width: 24px;
+    height: 24px;
+    vertical-align: middle;
+}
+
+.imageSmallInherit {
+    
+    width: inherit;
+    height: inherit;
+    margin-top: -15px;
+    vertical-align: middle;
+}
+
+.imageSmaller {
+    width: 32px;
+    height: 32px;
+    vertical-align: middle;
+}
+
+.image {
+    width: 48px;
+    height: 48px;
+    vertical-align: middle;
+}
+
+.imageMedium {
+    width: 96px;
+    height: 96px;
+    vertical-align: middle;
+}
+
+.imageLarge {
+    width: 128px;
+    height: 128px;
+    vertical-align: middle;
+}
+
+.imageHuge {
+    width: 256px !important;
+    height: 256px !important;
+    vertical-align: middle !important;
+}
+
+@media (max-width: 1200px) {
+    .siteLogo {
+        width: 300px;
+        height: 100px;
+    }
+}
+
+@media (max-width: 992px) {
+    .siteLogo {
+        width: 300px;
+        height: 100px;
+    }
+}
+
+@media (max-width: 768px) {
+    .siteLogo {
+        width: 300px;
+        height: 100px;
+    }
+
+    .image {
+        width: 32px;
+        height: 32px;
+        vertical-align: middle;
+    }
+
+    .imageMedium {
+        width: 64px;
+        height: 64px;
+        vertical-align: middle;
+    }
+
+    .imageLarge {
+        width: 96px;
+        height: 96px;
+        vertical-align: middle;
+    }
+
+    .imageHuge {
+        width: 182px !important;
+        height: 182px !important;
+        vertical-align: middle !important;
+    }
+}
+
+/* V. OTHER ================================================================================================= */
+hr {
+    margin: 40px 0px;
+    border-color: #ef6c00; /* Orange 800 */
+    opacity: 0.2;
+    filter: alpha(opacity=20);
+}
+
+ul.no-bullets {
+    list-style-type: none;
+    margin: 0px;
+    padding: 0px;
+}
+
+.validation-summary-errors ul {
+    list-style-type: square;
+    list-style-position: inside;
+    color: #a94442;
+}
+
+.input-group-addon.primary {
+    color: rgb(255, 255, 255);
+    background-color: rgb(50, 118, 177);
+    border-color: rgb(40, 94, 142);
+}
+
+.input-group-addon.success {
+    color: rgb(255, 255, 255);
+    background-color: rgb(92, 184, 92);
+    border-color: rgb(76, 174, 76);
+}
+
+.input-group-addon.info {
+    color: rgb(255, 255, 255);
+    background-color: rgb(57, 179, 215);
+    border-color: rgb(38, 154, 188);
+}
+
+.input-group-addon.warning {
+    color: rgb(255, 255, 255);
+    background-color: rgb(240, 173, 78);
+    border-color: rgb(238, 162, 54);
+}
+
+.input-group-addon.danger {
+    color: rgb(255, 255, 255);
+    background-color: rgb(217, 83, 79);
+    border-color: rgb(212, 63, 58);
+}
+
+.dropdown-menu {
+    text-align: left !important;
+}
+
+.scrollable-menu {
+    height: auto;
+    max-height: 200px;
+    overflow-x: hidden;
+}
+
+/* GLYPHICONS --------------------------------------------------------------------------------------------- */
+.normal {
+    color: #03a9f4; /* Light Blue 500 */
+}
+
+.filled {
+    color: #ef6c00; /* Orange 800 */
+}
+
+.empty {
+    color: #ffe0b2; /* Orange 100 */
+}
+
+.topicon {
+    font-size: 32px;
+}
+
+/* VI. BOOTSTRAP EXTENSIONS ================================================================================= */
+
+/* NAVBAR */
+.navbar-default {
+    background-color: #F8F8F8;
+    border-color: #E7E7E7;
+    color: #000;
+}
+
+.nav-pills {
+    border: 1px solid #fff;
+    border-radius: 5px;
+}
+
+    .nav-pills:hover {
+        background-color: #fff !important;
+        border: 1px solid #ccc !important;
+        border-radius: 5px;
+        box-shadow: inset 0 0 30px rgba(0,0,0,0.1), 1px 1px 3px rgba(0,0,0,0.2);
+    }
+
+.btn-primary, .btn-primary:hover, .btn-default, .btn-default:hover, .btn-info, .btn-info:hover, .btn-warning, .btn-warning:hover, .btn-danger, .btn-danger:hover, .btn-success, .btn-success:hover, .input-group-addon {
+    box-shadow: inset 0 0 30px rgba(0,0,0,0.2), 1px 1px 3px rgba(0,0,0,0.3);
+}
+
+.alert {
+    position: relative !important;
+    border-radius: 0;
+}
+
+    .alert:before {
+        content: "";
+        position: absolute;
+        top: -1px;
+        right: -1px;
+        border-width: 0 16px 16px 0;
+        border-style: solid;
+        border-color: #31708f #fff;
+        display: block;
+        width: 0;
+        -webkit-box-shadow: 0 1px 1px rgba(0,0,0,0.3), -1px 1px 1px rgba(0,0,0,0.2);
+        -moz-box-shadow: 0 1px 1px rgba(0,0,0,0.3), -1px 1px 1px rgba(0,0,0,0.2);
+        box-shadow: 0 1px 1px rgba(0,0,0,0.3), -1px 1px 1px rgba(0,0,0,0.2);
+    }
+
+/* VII - D3 charts styles */
+
+.grid .tick {
+	stroke: lightgrey;
+	opacity: 0.7;
+	shape-rendering: crispEdges;
+}
+ 
+.grid path {
+	stroke-width: 0;
+}
+ 
+.axis path {
+	fill: none;
+	stroke: #bbb;
+	shape-rendering: crispEdges;
+}
+ 
+.axis text {
+	fill: #555;
+}
+ 
+.axis line {	
+	stroke: #e7e7e7;
+	shape-rendering: crispEdges;
+}
+ 
+.axis .axis-label {
+	font-size: 14px;
+}
+
+.line {
+    stroke: steelblue;
+    fill: none;
+    stroke-width: 2px;
+}
+
+.normalLine {
+    stroke: lawngreen;    
+    stroke-width: 1px;
+}
+
+.area.above {
+  fill: rgb(252,141,89);
+}
+
+.area.below {
+  fill: rgb(145,207,96);
+}
+ 
+.dot {
+	/* consider the stroke-with the mouse detect radius? */
+	stroke: transparent;
+	stroke-width: 20px;  
+	cursor: pointer;
+}
+
+ 
+
+
+.dotText{
+    font-size:14px; 
+    font-style:italic;
+    font-weight:bold;    
+    opacity:0.2;
+    
+}
+
+/*.dotText:hover{
+    display:block;
+    opacity:1;
+    cursor:pointer;
+}*/
+
+.safe-sugar {
+  fill: green;
+  opacity: .3;
+}
+
+.chartTitle{
+    font-size:16px;
+    font-weight:bold;    
+}
+
+div.tooltip {
+    position: absolute;
+    text-align: center;
+    padding: 5px;
+    font-size: 14px;    
+    border: 0px;    
+    pointer-events: none;
+    font-weight: bold;    
+}
+
+
+.navigator .data {
+    fill: lightgrey;
+    stroke-width: 0px;
+}
+
+.navigator .line {
+    fill: none;
+    stroke: darkgrey;
+    stroke-width: 1px;
+}
+
+.navigator .viewport {
+    stroke: grey;
+    fill: black;
+    fill-opacity: 0.2;
+}
+
+.comparison-btn{
+    margin-left:20px;
+    width:70%;
+    margin-bottom:5px;
+}
+
+
+.resultsTableHeader{
+    background-color:lightgray;
+}
+
+.singleLine {
+  white-space: nowrap;
+  overflow: hidden;
+}

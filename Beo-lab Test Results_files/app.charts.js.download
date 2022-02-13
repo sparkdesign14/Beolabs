@@ -1,0 +1,348 @@
+﻿var multipleResultsData = [];
+var chartsDisplayed = false;
+
+function union(array1, array2) {
+    var hash = {}, union = [];
+    $.each($.merge($.merge([], array1), array2), function (index, value) {
+        hash[value] = value;
+    });
+    $.each(hash, function (key, value) {
+        union.push(value);
+    });
+    return union;
+};
+
+function drawChart(chartData, chartTitle, measurementUnit, placeHolder, chartHeight, allDataPoints, numeric) {
+    var dateEvery = 1;
+    var isAlphaNumeric = (typeof (alphanumeric) == 'undefined') ? false : (numeric == false);
+
+    if (allDataPoints.length > 3) {
+        dateEvery = Math.ceil(allDataPoints.length / 3);
+    }
+
+    // define the data points           
+    var placeHolderWidth = $(".modal-lg").width() - 42;
+    // Set the dimensions of the canvas / graph
+    var containerHeight = 0;
+    if (typeof (chartHeight) == 'undefined') containerHeight = 470; else containerHeight = chartHeight;
+    var margin = { top: 30, right: 20, bottom: 30, left: 50 }, width = placeHolderWidth - margin.left - margin.right, height = containerHeight - margin.top - margin.bottom;
+    //// Set the ranges. set the padding to 10 pixels
+    var rangePadding = 5;
+    var div;
+    // define the tooltip div.
+    if ($("#myDataPointDiv").length == 0) { div = d3.select(placeHolder).append("div").attr("class", "tooltip paper volumetry").style("opacity", 0).attr("id", "myDataPointDiv") }
+    else { div = d3.select("#myDataPointDiv"); }
+
+    var yMin = d3.min(allDataPoints, function (d) {
+        if (isAlphaNumeric) return 0;
+        if (d.resultValue == null) return 0; else return d.resultValue;
+    }),
+        yMax = d3.max(allDataPoints, function (d) {
+            if (isAlphaNumeric) return 1;
+            if (d.resultValue == null) return d.normalMax; else if (d.resultValue > d.normalMax) return d.resultValue; else return d.normalMax;
+        });
+    if (yMin > 0) { yMin = 0; }
+    var minDate = d3.min(allDataPoints, function (d) { return d.date; }),
+        maxDate = d3.max(allDataPoints, function (d) { return d.date; });
+    //  define the scales.
+    var xScale = d3.time.scale().domain([minDate, maxDate]).range([rangePadding, width - rangePadding]),
+        yScale = d3.scale.linear().domain([yMin, yMax]).nice().range([height - rangePadding, rangePadding]);
+    var xAxis = d3.svg.axis().scale(xScale).orient("bottom").ticks(5),
+        yAxis = d3.svg.axis().scale(yScale).orient('left').ticks(5);
+    var formatTime = d3.time.format("%e %B");
+    // Adds the svg canvas
+    var lineChart = d3.select("#chartBody").append("svg").attr("width", width + margin.left + margin.right).attr("height", height + margin.top + margin.bottom)
+        .append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")").data(allDataPoints);
+
+    var lineArea = lineChart.append('g').attr('clip-path', 'url(#lineAreaClip)');
+    lineArea.append('clipPath').attr('id', 'lineAreaClip').append('rect').attr({ width: width - rangePadding, height: height - rangePadding });
+
+    var normalityArea = d3.svg.area().x(function (d) { var xs = xScale(d.date); return xs; })
+        .y0(function (d) {
+            if (isAlphaNumeric) return 0;
+            var ys0 = yScale(d.normalMin); return ys0;
+        })
+        .y1(function (d) {
+            if (isAlphaNumeric) return 0;
+            var ys1 = yScale(d.normalMax); return ys1;
+        });
+
+    lineChart.append("path").datum(allDataPoints).attr("class", "safe-sugar").attr("d", normalityArea);
+    // Define the data line
+    if (!isAlphaNumeric) {
+        var valueline = d3.svg.line().x(function (d) { return xScale(d.date); }).y(function (d) { return yScale(d.resultValue); }).interpolate("monotone");
+        // draw the data line.
+        lineChart.append("path").attr("class", "line").attr("d", valueline(chartData));
+    }
+    // Add the X Axisfb
+    lineChart.append("g").attr("class", "x axis").attr("transform", "translate(0," + height + ")").call(xAxis);
+    // Add the Y Axis
+    lineChart.append("g").attr("class", "y axis").call(yAxis);
+    // add the Y axis legend.
+    if (!isAlphaNumeric) {
+        lineChart.append("g").attr("class", "y axis").call(yAxis).append("text").attr("class", "axis-label")
+            .attr("transform", "rotate(-90)").attr("y", (-margin.left) + 15).attr("x", -height / 2)
+            .text(chartHeight < 470 ? measurementUnit : (localizationTestResult + ' (' + measurementUnit + ')'));
+    }
+    // add the chart title
+    lineChart.append("text").attr("x", (width / 2)).attr("y", 0 - (margin.top / 2)).attr("text-anchor", "middle")
+        .attr("class", "chartTitle").text(chartTitle);
+    // draw data points    
+    var duration = 2000;
+    var interval = Math.round(duration / chartData.length);
+
+    var points = lineChart.selectAll('.dots').data(chartData).enter().append("g").attr("class", "dots").attr("clip-path", "url(#clip)");
+
+    points.selectAll('.dot')
+        .data(function (d, index) { var a = []; a.push({ 'index': index, 'point': d }); return a; })
+        .enter().append('circle').attr('class', 'dot').attr("r", 4.5)
+        .attr('fill', function (d, i) {
+            if (d.point.normal == true)
+                return "green"
+            else
+                return "red"
+        })
+        .on("mouseover", function (d) {
+            var th = $(placeHolder).position().top;
+            var lh = $(placeHolder).position().left;
+            div
+                .transition()
+                .duration(200)
+                .style("opacity", .8);
+            div
+                .html(d.point.originalDate + "<br/>" + d.point.resultValue + " " + measurementUnit)
+                .style("left", (xScale(d.point.date) + lh) + "px")
+                .style("top", th + (yScale(d.point.resultValue) - 8) + "px")
+                .style("background-color", d.point.normal ? "#99e699" : "#ff6666");
+        })
+        .on("mouseout", function (d) {
+            div.transition()
+                .duration(500)
+                .style("opacity", 0);
+        });
+
+    // put the points on the canvas and animate them.
+    points.transition().delay(function (d, i) { return i * interval; })
+        .ease("elastic").attr({ cx: function (d) { return 0; }, cy: function (d) { return yScale(d.resultValue); } })
+        .attr("transform", function (d) { return "translate(" + xScale(d.date) + "," + yScale(d.resultValue) + ")"; });
+    // add the point label
+    if (isAlphaNumeric)
+        points.append("text").attr({ x: function (d) { return -15; }, y: function (d) { return -15; } }).text(function (d) { return d.resultValue }).attr("class", "dotText").attr.transform("rotate(45)");
+    else
+        points.append("text").attr({ x: function (d) { return -15; }, y: function (d) { return -15; } }).text(function (d) { return d.resultValue }).attr("class", "dotText");
+}
+
+function doDisplayMultipleResults() {
+    var allDataPresent = true;
+    // i need to make sure that all the result dates are available to all the 
+    $.each(multipleResultsData, function (idx, val) {
+        if (val.noData == true) {
+            hideLoading();
+            chartsDisplayed = true;
+            return;
+        }
+        if (val.resultHistory == null) {
+            allDataPresent = false;
+            return;
+        }
+    });
+    if (!allDataPresent || chartsDisplayed) {
+        return;
+        // go and display the charts!
+    }
+    chartsDisplayed = true;
+    hideLoading();
+    // i have all the data, let's see what's going on there!
+    var allDates = [];
+    $.each(multipleResultsData, function (idx, val) {
+        var currentDatez = [];
+        $.each(val.resultHistory, function (i, v) {
+            currentDatez.push(v.date);
+        });
+        allDates = union(allDates, currentDatez);
+    });
+
+    allDates.sort(function (a, b) {
+        if (a == b) return 0;
+        if (a > b) return 1
+        else return -1;
+    });
+
+
+
+    // i have all the dates. sort it!
+
+    $("#chartBody").empty();
+    $.each(multipleResultsData, function (idx, val) {
+
+        if (val.resultHistory.length < 2) {
+            $.toaster({ priority: "warning", title: localizationChart, message: localizationNoDiagram + "<br/>" + val.chartTitle, settings: { timeout: 5000 } });
+        }
+        else {
+            jQuery('<div/>', {
+                id: 'chart' + idx,
+            }).appendTo('#chartBody');
+            $("#chart" + idx).addClass("result-chart");
+            // make up dummy data to fill in the non-existing data points.
+            // add to the left of the X axis:
+            var newData = val.resultHistory.slice();
+            var firstElement = newData[0];
+            var lastElement = newData[newData.length - 1];
+            if (firstElement.date > allDates[0]) {
+                //
+                $.each(allDates, function (idx2, val2) {
+                    if (val2 < firstElement.date) {
+                        newData.splice(idx2, 0, {
+                            date: val2,
+                            resultValue: firstElement.resultValue,
+                            normal: firstElement.normal,
+                            normalMin: firstElement.normalMin,
+                            normalMax: firstElement.normalMax,
+                            originalDate: firstElement.originalDate,
+                            dummyValue: true
+                        });
+                    }
+
+                });
+            }
+            if (lastElement.date < allDates[allDates.length - 1]) {
+                $.each(allDates, function (idx2, val2) {
+                    if (val2 > lastElement.date) {
+                        newData.push({
+                            date: val2,
+                            resultValue: lastElement.resultValue,
+                            normal: lastElement.normal,
+                            normalMin: lastElement.normalMin,
+                            normalMax: lastElement.normalMax,
+                            originalDate: lastElement.originalDate,
+                            dummyValue: true
+                        });
+                    }
+
+                });
+            }
+            drawChart(val.resultHistory, val.chartTitle, val.unitOfMeasure, "#chart" + idx, 150, newData, val.isNumeric);
+        }
+    });
+    if ($('#chartModal .result-chart').length == 0) {
+        return;
+    }
+    setTimeout(function () {
+        $('#chartModal').modal();
+    }, 200);
+}
+
+function displayMultipleResultEvolution(personId, resultIds, chartTitles, numericRezultz) {
+    multipleResultsData = [];
+    chartsDisplayed = false;
+    $.each(resultIds, function (idx, value) {
+        multipleResultsData.push({
+            personId: personId,
+            resultId: value,
+            chartTitle: chartTitles[idx],
+            isNumeric: numericRezultz[idx],
+            resultHistory: null
+        })
+    });
+    // get the data 
+    showLoading();
+    $.each(resultIds, function (idx, resultId) {
+        $.ajax({
+            url: theActionUrl,
+            data: {
+                resultId: resultId,
+                personId: personId,
+                r: Math.random()
+            },
+            type: "GET",
+            accept: "application/json"
+        })
+        .success(function (response) {
+            var elem = $.grep(multipleResultsData, function (element, index) {
+                if (element.resultId == resultId) {
+                    return element;
+                }
+            })[0];
+
+            if (response == [] || response.length < 1) {
+                $.toaster({ priority: "warning", title: localizationChart, message: localizationNoDiagram + "<br/>" + chartTitles[idx], settings: { timeout: 5000 } });
+                elem.noData = true;
+            }
+            else {
+                elem.noData = false;
+                var chartData = [];
+                // Parse the date / time function
+                var parseDate = d3.time.format("%d.%m.%Y").parse;
+                for (var i = 0; i < response.length; i++) {
+                    var dataPoint = response[i];
+                    chartData.push(
+                        {
+                            date: parseDate(dataPoint.Date),
+                            resultValue: dataPoint.Value,
+                            normal: dataPoint.NormalResult,
+                            normalMin: dataPoint.NormalRangeMin,
+                            normalMax: dataPoint.NormalRangeMax,
+                            originalDate: dataPoint.Date,
+                            dummyValue: false
+                        });
+                }
+
+                elem.resultHistory = chartData;
+                elem.unitOfMeasure = response[0].UnitOfMeasure;
+            }
+            setTimeout(function () {
+                doDisplayMultipleResults();
+            }, 200);
+        })
+        .error(function (jqXHR, textStatus, errorThrown) {
+            alert(errorThrown);
+            hideLoading();
+        });
+    });
+}
+
+function displaySingleResultEvolution(resultId, persontId, chartTitle, isNumeric) {
+
+    $.ajax({
+        url: theActionUrl,
+        data: {
+            resultId: resultId,
+            personId: persontId,
+            r: Math.random()
+        },
+        type: "GET",
+        accept: "application/json"
+    }).success(function (response) {
+        if (response.length < 2) {
+            $.toaster({ priority: "warning", title: localizationChart, message: localizationNoDiagram, settings: { timeout: 5000 } });
+        }
+        else {
+            var chartData = [];
+            // Parse the date / time function
+            var parseDate = d3.time.format("%d.%m.%Y").parse;
+            for (var i = 0; i < response.length; i++) {
+                var dataPoint = response[i];
+                chartData.push(
+                    {
+                        date: parseDate(dataPoint.Date),
+                        resultValue: dataPoint.Value,
+                        normal: dataPoint.NormalResult,
+                        normalMin: dataPoint.NormalRangeMin,
+                        normalMax: dataPoint.NormalRangeMax,
+                        originalDate: dataPoint.Date,
+                        dummyValue: false
+                    });
+            }
+            $("#chartBody").empty();
+            drawChart(chartData, chartTitle, response[0].UnitOfMeasure, "#chartBody", 470, chartData, isNumeric);
+            setTimeout(function () {
+                $('#chartModal').modal();
+            }, 200);
+        }
+        hideLoading();
+
+    }).error(function (jqXHR, textStatus, errorThrown) {
+        alert(errorThrown);
+        hideLoading();
+    });
+}
